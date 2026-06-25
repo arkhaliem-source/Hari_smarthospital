@@ -54,32 +54,32 @@ DEPT_INFO = {
     'Respiratory Medicine':{
         'icon':'😤','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'no breath go here',
-        'next':['Visit Level 2, and go Pray]
+        'next':['Visit Level 2, and go Pray']
     },
      'Cardiology':{
         'icon':'👣','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'When you get too much or less cardio, maybe a cardiac arrest',
-        'next':['Visit Level 3, and start taking care of your legs]
+        'next':['Visit Level 3, and start taking care of your legs']
     }, 
      'Gastroenterology':{
         'icon':'🤢','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'When your stomach hurts',
-        'next':['Visit Level 4, hopefully it's not too bad]
+        'next':['Visit Level 4, hopefully it's not too bad']
     }, 
        'Neurology':{
         'icon':'🧠','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'When your head hurts',
-        'next':['Visit Level 5, Maybe your brain got damaged]
+        'next':['Visit Level 5, Maybe your brain got damaged']
     }, 
            'General Medicine':{
         'icon':'🧪','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'Common sicknesses etc',
-        'next':['Visit Level 6, Dont die]
+        'next':['Visit Level 6, Dont die']
     }, 
           'Dermatology':{
         'icon':'😬','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
         'desc':'You have skinperoblems',
-        'next':['Visit Level -1, how do you have a skin problem]
+        'next':['Visit Level -1, how do you have a skin problem']
     }, 
 }
 
@@ -115,11 +115,25 @@ with st.form("triage_form"):
         </div>
     </div>
     """, unsafe_allow_html=True)
-    c1
 
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        fever            = st.checkbox("🌡️  Fever")
+        cough            = st.checkbox("🤧  Cough")
+    with c2:
+        headache         = st.checkbox("🤕  Headache")
+        chest_pain       = st.checkbox("💔  Chest Pain")
+    with c3:
+        stomach_pain     = st.checkbox("🤢  Stomach Pain")
+        shortness_breath = st.checkbox("😮‍💨  Shortness of Breath")
+    with c4:
+        nausea_vomiting  = st.checkbox("🤮  Nausea / Vomiting")
+        dizziness        = st.checkbox("😵  Dizziness")
 
+    c5, _, _, _ = st.columns(4)
+    with c5:
+        skin_rash = st.checkbox("🔴  Skin Rash")
 
-  #------------------------------------------------------------
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Section 2 — Duration & Complaint
@@ -134,9 +148,15 @@ with st.form("triage_form"):
     </div>
     """, unsafe_allow_html=True)
 
+    col_cc, col_dur = st.columns(2)
+    with col_cc:
+        chief_complaint = st.selectbox("Chief complaint", options=list(cc_map.keys()))
+    with col_dur:
+        duration = st.selectbox("Duration", options=list(dur_map.keys()), index=1)
 
+    st.markdown("<br>", unsafe_allow_html=True)
 
-# Section 3 — Severity
+    # Section 3 — Severity
     st.markdown("""
     <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;
                 padding:20px 24px;margin-bottom:20px;">
@@ -148,9 +168,15 @@ with st.form("triage_form"):
     </div>
     """, unsafe_allow_html=True)
 
-  
+    col_temp, col_hr = st.columns(2)
+    with col_temp:
+        temperature_level = st.selectbox("Temperature", options=list(temp_map.keys()), index=1)
+    with col_hr:
+        heart_rate_level  = st.selectbox("Heart rate", options=list(hr_map.keys()), index=1)
 
-# Section 4 — Medical History
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Section 4 — Medical History
     st.markdown("""
     <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;
                 padding:20px 24px;margin-bottom:20px;">
@@ -162,9 +188,14 @@ with st.form("triage_form"):
     </div>
     """, unsafe_allow_html=True)
 
+    ch1, ch2, ch3, _ = st.columns(4)
+    with ch1: hypertension  = st.checkbox("🩺 High Blood Pressure")
+    with ch2: heart_disease = st.checkbox("❤️ Heart Disease")
+    with ch3: asthma        = st.checkbox("💨 Asthma")
 
+    st.markdown("<br>", unsafe_allow_html=True)
 
- # Section 5 — Patient Info
+    # Section 5 — Patient Info
     st.markdown("""
     <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;
                 padding:20px 24px;margin-bottom:24px;">
@@ -176,7 +207,13 @@ with st.form("triage_form"):
     </div>
     """, unsafe_allow_html=True)
 
+    col_age, col_gen = st.columns(2)
+    with col_age:
+        age    = st.number_input("Age", min_value=1, max_value=120, value=35)
+    with col_gen:
+        gender = st.selectbox("Gender", options=['Female', 'Male'])
 
+    submitted = st.form_submit_button("Get AI Recommendation →")
 
 
 # ── Result ────────────────────────────────────────────────────────────────────
