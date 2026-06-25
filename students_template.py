@@ -1,10 +1,10 @@
+import streamlit as st
+import pandas as pd
+import pickle
+import os
+import numpy as np
 
-
-
-
-
-
-
+st.set_page_config(page_title="Smart Hospital Patient Navigator", page_icon="👩🏿‍🤝‍👩🏾", layout="wide")
 
 st.markdown("""
     <style>
@@ -34,7 +34,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 ###End of above CSS, continue with features here
+@st.cache_resource
+def load_model():
+    with open('hospital_model.pkl', 'rb') as f:
+        return pickle.load(f)
 
+bundle = load_model()
+model = bundle['model']
+scaler = bundle['scaler']
+features = bundle['features']
+cols_to_scale = bundle['cols_to_scale']
+dept_map_inv = bundle['dept_map_inv']
+gender_map = bundle['gender_map']
+temp_map = bundle['temp_map']
+hr_map = bundle['hr_map']
+dur_map = bundle['dur_map']
+cc_map = bundle['cc_map']
+DEPT_INFO = {
+    'Respiratory Medicine':{
+        'icon':'😤','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'no breath go here',
+        'next':['Visit Level 2, and go Pray]
+    },
+     'Cardiology':{
+        'icon':'👣','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'When you get too much or less cardio, maybe a cardiac arrest',
+        'next':['Visit Level 3, and start taking care of your legs]
+    }, 
+     'Gastroenterology':{
+        'icon':'🤢','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'When your stomach hurts',
+        'next':['Visit Level 4, hopefully it's not too bad]
+    }, 
+       'Neurology':{
+        'icon':'🧠','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'When your head hurts',
+        'next':['Visit Level 5, Maybe your brain got damaged]
+    }, 
+           'General Medicine':{
+        'icon':'🧪','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'Common sicknesses etc',
+        'next':['Visit Level 6, Dont die]
+    }, 
+          'Dermatology':{
+        'icon':'😬','color':'#0284c7','bg':'#e0f2fe','border':'#7dd3fc',
+        'desc':'You have skinperoblems',
+        'next':['Visit Level -1, how do you have a skin problem]
+    }, 
+}
 
 # ── Hero Header ───────────────────────────────────────────────────────────────
 st.markdown("""
